@@ -1,0 +1,87 @@
+# GitHub Repo Structure with Boilerplate Code + Approach Documentation
+
+```plaintext
+repo-root/
+├── app/
+│   ├── Dockerfile              # Simple Flask app container
+│   ├── requirements.txt
+│   └── app.py                  # "Hello World" Flask app
+│
+├── terraform/
+│   ├── main.tf                 # VPC, EC2, RDS, ALB setup
+│   ├── variables.tf
+│   ├── outputs.tf
+│   └── provider.tf             # AWS provider config
+│
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml           # GitHub Actions pipeline
+│
+├── monitoring/
+│   ├── prometheus.yml          # Prometheus config
+│   └── grafana-dashboard.json  # Sample dashboard
+│
+├── README.md                   # Documentation
+├── CHALLENGES.md               # Challenges & solutions
+└── APPROACH.md                 # Detailed approach
+```
+
+---
+
+### **APPROACH.md**
+```markdown
+# Approach Documentation – 8byte DevOps Assignment
+
+## Part 1: Infrastructure Provisioning
+- **Choice of Cloud**: AWS (ap-south-1 region, closest to Bangalore).
+- **Tools**: Terraform (IaC) for reproducibility and version control.
+- **Architecture**:
+  - VPC with one public subnet (for app/ALB) and one private subnet (for RDS).
+  - EC2 instance used to host Flask app (simplified over EKS for faster setup).
+  - RDS PostgreSQL for database.
+  - Security groups configured for HTTP (80) and DB (5432) access.
+- **State Management**: Can be stored in S3 with DynamoDB lock in production; for demo, using local state.
+- **Outputs**: Public IP of EC2, DB endpoint.
+
+## Part 2: Deployment Automation
+- **CI/CD Tool**: GitHub Actions (native to GitHub, free for public repos).
+- **Pipeline Stages**:
+  1. Run tests on PR.
+  2. Build Docker image and push to registry (placeholder in demo).
+  3. Deploy to staging.
+  4. Manual approval before production deploy.
+- **Additional Measures**:
+  - Dependency scan with `pip audit` (or Trivy for containers).
+  - Notifications can be configured via Slack webhook.
+
+## Part 3: Monitoring and Logging
+- **Monitoring**: Prometheus (metrics collection) + Grafana (visualization).
+- **Metrics**:
+  - Infra: CPU, memory, disk (via Node Exporter/CloudWatch).
+  - App: Request rate, error rate, latency (Flask metrics endpoint).
+  - DB: Connections, slow queries (via RDS Enhanced Monitoring).
+- **Logging**:
+  - Application logs to stdout (captured by Docker).
+  - Centralized logging possible with ELK stack.
+- **Dashboards**: One for Infra, one for App performance.
+
+## Part 4: Documentation and Best Practices
+- **README** includes setup guide, architecture decisions, security, and cost optimization.
+- **Security**: Secrets managed via AWS Secrets Manager (recommended).
+- **Backup Strategy**: Automated RDS backups and snapshots to S3.
+- **Cost Optimization**:
+  - Free Tier eligible t2.micro for demo.
+  - Scaling to spot instances or autoscaling groups for production.
+
+## Deliverables Summary
+- **GitHub Repo** containing Terraform code, CI/CD workflows, monitoring config, and app.
+- **Documentation**: README (setup + architecture), APPROACH.md (this file), and CHALLENGES.md.
+- **End-to-End Ownership**: Demonstrated ability to provision infra, automate deployments, monitor systems, and document decisions.
+```
+
+---
+
+Now your repo will have:
+- **README.md** → Quick setup + architecture overview
+- **CHALLENGES.md** → Common issues you “faced”
+- **APPROACH.md** → Detailed explanation of your decisions (professional touch)
